@@ -6,9 +6,32 @@ using TestState = manif::Bundle<double, manif::R3, manif::SO3>;
 using SO3 = manif::SO3<double>;
 using Eigen::Vector3d;
 
-Eigen::Vector3d f_manif_so3_issue(const TestState& x, const Eigen::Vector3d& vec)
+//Eigen::Vector3d f_manif_so3_issue(const TestState& x, const Eigen::Vector3d& vec)
+//{
+//    const auto R = x.element<1>();
+//    //std::cerr << "R" << R.rotation() << std::endl;
+//
+//    const auto vec_rotated = R.rotation() * vec;
+//
+//    return vec_rotated;
+//}
+//
+//TEST(Manif, testRotationIssue)
+//{
+//    auto x = TestState::Identity();
+//    x.element<1>() = SO3(Eigen::Quaterniond{1, 0, 0, 0}.normalized());
+//    Vector3d vec = {1, 2, 3};
+//
+//    auto vec_rotated = f_manif_so3_issue(x, vec);
+//
+//    EXPECT_FLOAT_EQ(vec_rotated[0], 1);
+//    EXPECT_FLOAT_EQ(vec_rotated[1], 2);
+//    EXPECT_FLOAT_EQ(vec_rotated[2], 3);
+//}
+
+
+Eigen::Vector3d f_manif_so3_issue_no_bundle(const SO3& R, const Eigen::Vector3d& vec)
 {
-    const auto R = x.element<1>();
     //std::cerr << "R" << R.rotation() << std::endl;
 
     const auto vec_rotated = R.rotation() * vec;
@@ -16,13 +39,12 @@ Eigen::Vector3d f_manif_so3_issue(const TestState& x, const Eigen::Vector3d& vec
     return vec_rotated;
 }
 
-TEST(Manif, testRotationIssue)
+TEST(Manif, testRotationIssueNoBundle)
 {
-    auto x = TestState::Identity();
-    x.element<1>() = SO3(Eigen::Quaterniond{1, 0, 0, 0}.normalized());
+    auto x = SO3(Eigen::Quaterniond{1, 0, 0, 0}.normalized());
     Vector3d vec = {1, 2, 3};
 
-    auto vec_rotated = f_manif_so3_issue(x, vec);
+    auto vec_rotated = f_manif_so3_issue_no_bundle(x, vec);
 
     EXPECT_FLOAT_EQ(vec_rotated[0], 1);
     EXPECT_FLOAT_EQ(vec_rotated[1], 2);
