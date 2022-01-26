@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 
 find_package(GTest QUIET)
 
-if(NOT GTEST_FOUND)
+if(GTEST_FOUND)
   # If not found, download it
 
   # Download and unpack googletest at configure time
@@ -47,6 +47,8 @@ function(manif_add_gtest target)
 
   add_test(NAME ${target} COMMAND ${target})
 endfunction()
+
+manif_add_gtest(test_so3_issue test_so3_issue.cpp)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
