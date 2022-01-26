@@ -1,3 +1,5 @@
+#include <Eigen/Dense>
+
 #include <gtest/gtest.h>
 #include <Eigen/Dense>
 #include <manif/manif.h>
@@ -30,18 +32,17 @@ using Eigen::Vector3d;
 //}
 
 
-Eigen::Vector3d f_manif_so3_issue_no_bundle(const SO3& R, const Eigen::Vector3d& vec)
+Eigen::Vector3d f_manif_so3_issue_no_bundle(const Eigen::Quaterniond& R, const Eigen::Vector3d& vec)
 {
-    //std::cerr << "R" << R.rotation() << std::endl;
-
-    const auto vec_rotated = R.rotation() * vec;
+    //std::cerr << "R" << R.matrix() << std::endl;
+    const auto vec_rotated = R.matrix() * vec;
 
     return vec_rotated;
 }
 
 TEST(Manif, testRotationIssueNoBundle)
 {
-    auto x = SO3(Eigen::Quaterniond{1, 0, 0, 0}.normalized());
+    Eigen::Quaterniond x{1, 0, 0, 0};
     Vector3d vec = {1, 2, 3};
 
     auto vec_rotated = f_manif_so3_issue_no_bundle(x, vec);
